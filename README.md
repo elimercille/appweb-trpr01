@@ -1,5 +1,5 @@
-# Vue 3 + TypeScript + Vite
+• Description du projet : Mon projet consiste un magasin de peluches de la série Sanrio. On peut y ajouter des nouveaux produits (sans nouvelle image), les modifier et les supprimer.
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+• Toute mention et description d’utilisation d’une IA : J'ai utiliser l'IA afin de bien comprendre l'utilisation des props et de "emit" puisque le découpage de mes composantes nécessite l'utilisation de ceux-ci afin que les parents/enfants communiquent bien entre eux.
+• URL du repo GitHub : https://github.com/elimercille/appweb-trpr01
+• URL du site déployé : https://elimercille.github.io/appweb-trpr01/
