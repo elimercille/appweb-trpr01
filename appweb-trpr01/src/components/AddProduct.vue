@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, defineProps, defineEmits } from "vue";
 import { type Product } from "../scripts/Product";
 
-// Définir les props et émetteurs
 const props = defineProps<{
   productCount: number;
 }>();
@@ -11,18 +10,25 @@ const emit = defineEmits<{
   (e: "add-product", product: Product): void;
 }>();
 
+const showForm = ref<boolean>(false);
+
 const newProductName = ref<string>("");
 const newProductDescription = ref<string>("");
 const newProductPrice = ref<number>(0);
 const newProductQuantity = ref<number>(0);
-const newProductImage = ref<string>("/no-image.jpg");
+const newProductImage = ref<string>("/appweb-trpr01/no-image.jpg");
 
 const nextProductId = computed(() => {
   return props.productCount + 1;
 });
 
+const showRequiredField = ref<boolean>(false);
+
 function addProduct() {
-  // Ajout des nouvelles valeurs au produit
+  if (newProductName.value === "" || newProductPrice.value === 0) {
+    showRequiredField.value = true;
+    return;
+  }
   const newProduct: Product = {
     id: nextProductId.value,
     name: newProductName.value,
@@ -34,107 +40,185 @@ function addProduct() {
 
   emit("add-product", newProduct);
 
-  // Réinitialiser les champs
   newProductName.value = "";
   newProductDescription.value = "";
   newProductPrice.value = 0;
   newProductQuantity.value = 0;
   newProductImage.value = "/no-image.jpg";
 }
+
+function toggleForm() {
+  showForm.value = !showForm.value;
+}
 </script>
 
 <template>
-  <div class="container mt-4">
-    <div class="card shadow-sm p-4">
-      <h2 class="text-center mb-4 text-custom fw-bold">Ajouter un produit</h2>
-      <form @submit.prevent="addProduct">
-        <div class="row g-3">
-          <!-- Nom produit -->
-          <div class="col-12 mb-3">
-            <label for="name" class="form-label">Nom du produit</label>
-            <input
-              type="text"
-              id="name"
-              class="form-control"
-              v-model="newProductName"
-              required
-            />
-          </div>
+  <div class="container">
+    <div class="text-center mb-3" v-if="!showForm">
+      <button class="btn btn-success btn-sm" @click="toggleForm">
+        <i class="bi bi-plus-circle me-2"></i>
+        Ajouter un nouveau produit
+      </button>
+    </div>
 
-          <!-- Description produit -->
-          <div class="col-12 mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea
-              id="description"
-              class="form-control"
-              v-model="newProductDescription"
-              required
-              rows="4"
-            ></textarea>
-          </div>
+    <div v-if="showForm" class="card shadow-sm">
+      <div class="card-body p-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="text-custom fw-bold m-0">Ajouter un produit</h2>
+          <button class="btn btn-sm btn-outline-secondary" @click="toggleForm">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
 
-          <!-- Prix produit -->
-          <div class="col-12 mb-3">
-            <label for="price" class="form-label">Prix ($)</label>
-            <input
-              type="number"
-              id="price"
-              class="form-control"
-              v-model="newProductPrice"
-              required
-              min="0"
-              step="0.01"
-            />
-          </div>
-
-          <!-- Quantité produit -->
-          <div class="col-12 mb-3">
-            <label for="quantity" class="form-label">Quantité</label>
-            <input
-              type="number"
-              id="quantity"
-              class="form-control"
-              v-model="newProductQuantity"
-              required
-              min="1"
-            />
-          </div>
-
-          <!-- Image produit -->
-          <div class="col-12 mb-3">
-            <label for="image" class="form-label">Image</label>
-            <select id="image" class="form-select" v-model="newProductImage">
-              <option value="/no-image.jpg">Non disponible</option>
-            </select>
-          </div>
-
-          <!-- Aperçu de l'image sélectionnée -->
-          <div class="col-12 mb-3 text-center">
-            <div class="card p-3 shadow-sm">
+        <form @submit.prevent="addProduct">
+          <div class="row g-2">
+            <!-- Nom produit -->
+            <div class="col-12">
+              <label for="name" class="form-label small-label"
+                >Nom du produit</label
+              >
+              <input
+                type="text"
+                id="name"
+                class="form-control form-control-sm"
+                v-model="newProductName"
+              />
+            </div>
+            <!-- Description produit -->
+            <div class="col-12">
+              <label for="description" class="form-label small-label"
+                >Description</label
+              >
+              <textarea
+                id="description"
+                class="form-control form-control-sm"
+                v-model="newProductDescription"
+                rows="2"
+              ></textarea>
+            </div>
+            <!-- Prix et Quantité -->
+            <div class="col-6">
+              <label for="price" class="form-label small-label">Prix ($)</label>
+              <input
+                type="number"
+                id="price"
+                class="form-control form-control-sm"
+                v-model="newProductPrice"
+                min="0"
+                step="0.01"
+              />
+            </div>
+            <div class="col-6">
+              <label for="quantity" class="form-label small-label"
+                >Quantité</label
+              >
+              <input
+                type="number"
+                id="quantity"
+                class="form-control form-control-sm"
+                v-model="newProductQuantity"
+              />
+            </div>
+            <!-- Image produit -->
+            <div class="col-12">
+              <label for="image" class="form-label small-label">Image</label>
+              <select
+                id="image"
+                class="form-select form-select-sm"
+                v-model="newProductImage"
+              >
+                <option value="/appweb-trpr01/no-image.jpg">
+                  Non disponible
+                </option>
+              </select>
+            </div>
+            <!-- Aperçu de l'image -->
+            <div class="col-12 text-center mt-2">
               <img
                 :src="newProductImage"
                 alt="Aperçu"
-                class="img-thumbnail mx-auto d-block"
-                style="max-width: 150px"
+                class="img-thumbnail"
+                style="max-width: 100px"
               />
-              <p class="mt-2 text-muted">Aperçu de l'image</p>
+            </div>
+          </div>
+          <!-- Bouton formulaire -->
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-primary btn-sm">
+              Ajouter le produit
+            </button>
+          </div>
+        </form>
+      </div>
+      <div
+        v-if="showRequiredField"
+        class="modal fade show"
+        style="display: block; background: rgba(0, 0, 0, 0.5)"
+        tabindex="-1"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">⚠ Champs requis</h5>
+              <button
+                type="button"
+                class="btn-close"
+                @click="showRequiredField = false"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <p>
+                Veuillez remplir tous les champs requis avant d'ajouter un
+                produit.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="showRequiredField = false"
+              >
+                Fermer
+              </button>
             </div>
           </div>
         </div>
-
-        <!-- Bouton formulaire -->
-        <div class="d-grid mt-4">
-          <button type="submit" class="btn btn-primary btn-lg">
-            Ajouter le produit
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .text-custom {
-  color: #a8fa8a;
+  color: #ffb2bb;
+}
+
+.small-label {
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.form-control-sm {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.form-label {
+  margin-bottom: 0.25rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-dialog {
+  background: white;
+  border-radius: 10px;
 }
 </style>

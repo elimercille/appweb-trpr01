@@ -3,7 +3,7 @@ import banner from "./../assets/images/banner.png";
 </script>
 
 <template>
-  <header class="container-fluid bg-light py-3 shadow-sm">
+  <header class="container-fluid py-3">
     <div class="text-center">
       <h1 class="mt-3 fw-bold text-custom">Mes peluches Sanrio</h1>
       <img
