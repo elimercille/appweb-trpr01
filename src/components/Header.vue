@@ -16,8 +16,4 @@ import banner from "./../assets/images/banner.png";
   </header>
 </template>
 
-<style scoped>
-.text-custom {
-  color: #ffb2bb;
-}
-</style>
+<style scoped></style>

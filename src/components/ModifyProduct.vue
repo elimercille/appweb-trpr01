@@ -7,8 +7,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "modify-product", product: Product): void;
-  (e: "cancel-modify"): void;
+  (e: "modifyProduct", product: Product): void;
+  (e: "cancelModify"): void;
 }>();
 
 const modifiedName = ref(props.product.name);
@@ -27,11 +27,11 @@ function saveModifications() {
     image: modifiedImage.value,
   };
 
-  emit("modify-product", modifiedProduct);
+  emit("modifyProduct", modifiedProduct);
 }
 
 function cancelModifications() {
-  emit("cancel-modify");
+  emit("cancelModify");
 }
 </script>
 
@@ -139,19 +139,4 @@ function cancelModifications() {
   </div>
 </template>
 
-<style scoped>
-.text-custom {
-  color: #ffb2bb;
-}
-.small-label {
-  font-size: 0.8rem;
-  margin-bottom: 0.25rem;
-}
-.form-control-sm {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-}
-.form-label {
-  margin-bottom: 0.25rem;
-}
-</style>
+<style scoped></style>

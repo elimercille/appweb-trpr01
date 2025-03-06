@@ -9,21 +9,21 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "delete-product", productId: number): void;
-  (e: "duplicate-product", product: Product): void;
-  (e: "modify-product", product: Product): void;
+  (e: "deleteProduct", productId: number): void;
+  (e: "duplicateProduct", product: Product): void;
+  (e: "modifyProduct", product: Product): void;
 }>();
 
 function handleDeleteProduct(productId: number) {
-  emit("delete-product", productId);
+  emit("deleteProduct", productId);
 }
 
 function handleDuplicateProduct(product: Product) {
-  emit("duplicate-product", product);
+  emit("duplicateProduct", product);
 }
 
 function handleModifyProduct(product: Product) {
-  emit("modify-product", product);
+  emit("modifyProduct", product);
 }
 </script>
 
@@ -60,8 +60,4 @@ function handleModifyProduct(product: Product) {
   </div>
 </template>
 
-<style scoped>
-.text-custom {
-  color: #ffb2bb;
-}
-</style>
+<style scoped></style>

@@ -99,4 +99,5 @@ function handleSearch(query: string) {
     />
   </div>
 </template>
+
 <style scoped></style>

@@ -7,7 +7,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "add-product", product: Product): void;
+  (e: "addProduct", product: Product): void;
 }>();
 
 const showForm = ref<boolean>(false);
@@ -25,7 +25,11 @@ const nextProductId = computed(() => {
 const showRequiredField = ref<boolean>(false);
 
 function addProduct() {
-  if (newProductName.value === "" || newProductPrice.value === 0) {
+  if (
+    newProductName.value === "" ||
+    newProductPrice.value === 0 ||
+    newProductQuantity.value === 0
+  ) {
     showRequiredField.value = true;
     return;
   }
@@ -38,7 +42,7 @@ function addProduct() {
     image: newProductImage.value,
   };
 
-  emit("add-product", newProduct);
+  emit("addProduct", newProduct);
 
   newProductName.value = "";
   newProductDescription.value = "";
@@ -75,7 +79,7 @@ function toggleForm() {
             <!-- Nom produit -->
             <div class="col-12">
               <label for="name" class="form-label small-label"
-                >Nom du produit</label
+                >Nom du produit <span class="text-danger">*</span></label
               >
               <input
                 type="text"
@@ -98,7 +102,9 @@ function toggleForm() {
             </div>
             <!-- Prix et Quantité -->
             <div class="col-6">
-              <label for="price" class="form-label small-label">Prix ($)</label>
+              <label for="price" class="form-label small-label"
+                >Prix ($) <span class="text-danger">*</span></label
+              >
               <input
                 type="number"
                 id="price"
@@ -110,13 +116,15 @@ function toggleForm() {
             </div>
             <div class="col-6">
               <label for="quantity" class="form-label small-label"
-                >Quantité</label
+                >Quantité<span class="text-danger">*</span></label
               >
               <input
                 type="number"
                 id="quantity"
                 class="form-control form-control-sm"
                 v-model="newProductQuantity"
+                min="0"
+                step="1"
               />
             </div>
             <!-- Image produit -->
@@ -127,7 +135,7 @@ function toggleForm() {
                 class="form-select form-select-sm"
                 v-model="newProductImage"
               >
-                <option value="/appweb-trpr01/no-image.jpg">
+                <option value="/appweb-trpr01/no-image.jpg" selected>
                   Non disponible
                 </option>
               </select>
@@ -154,12 +162,14 @@ function toggleForm() {
         v-if="showRequiredField"
         class="modal fade show"
         style="display: block; background: rgba(0, 0, 0, 0.5)"
-        tabindex="-1"
       >
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">⚠ Champs requis</h5>
+              <h5 class="modal-title">
+                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                Champs requis
+              </h5>
               <button
                 type="button"
                 class="btn-close"
@@ -188,37 +198,4 @@ function toggleForm() {
   </div>
 </template>
 
-<style scoped>
-.text-custom {
-  color: #ffb2bb;
-}
-
-.small-label {
-  font-size: 0.8rem;
-  margin-bottom: 0.25rem;
-}
-
-.form-control-sm {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-}
-
-.form-label {
-  margin-bottom: 0.25rem;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-dialog {
-  background: white;
-  border-radius: 10px;
-}
-</style>
+<style scoped></style>

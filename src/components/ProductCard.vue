@@ -9,9 +9,9 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "delete-product", productId: number): void;
-  (e: "duplicate-product", product: Product): void;
-  (e: "modify-product", product: Product): void;
+  (e: "deleteProduct", productId: number): void;
+  (e: "duplicateProduct", product: Product): void;
+  (e: "modifyProduct", product: Product): void;
 }>();
 
 const showDetails = ref<boolean>(false);
@@ -19,11 +19,11 @@ const isModifying = ref<boolean>(false);
 const showOutOfStock = ref<boolean>(false);
 
 function handleDeleteProduct() {
-  emit("delete-product", props.product.id);
+  emit("deleteProduct", props.product.id);
 }
 
 function handleDuplicateProduct() {
-  emit("duplicate-product", props.product);
+  emit("duplicateProduct", props.product);
 }
 
 function toggleDetails() {
@@ -35,7 +35,7 @@ function startModifying() {
 }
 
 function handleModifyProduct(modifiedProduct: Product) {
-  emit("modify-product", modifiedProduct);
+  emit("modifyProduct", modifiedProduct);
   isModifying.value = false;
 }
 
@@ -75,6 +75,7 @@ watch(
         <span>{{ product.price }}$</span>
         <span :class="quantityClass">{{ product.quantity }} en stock</span>
         <span>
+          <!-- Bouton détails -->
           <button
             type="button"
             class="btn btn-outline-secondary btn-sm me-1"
@@ -82,6 +83,7 @@ watch(
           >
             <i class="bi bi-three-dots"></i>
           </button>
+          <!-- Bouton modification -->
           <button
             type="button"
             class="btn btn-outline-warning btn-sm me-1"
@@ -89,6 +91,7 @@ watch(
           >
             <i class="bi bi-pencil"></i>
           </button>
+          <!-- Bouton dupliquer -->
           <button
             type="button"
             class="btn btn-outline-info btn-sm me-1"
@@ -96,6 +99,7 @@ watch(
           >
             <i class="bi bi-files"></i>
           </button>
+          <!-- Bouton supprimer -->
           <button
             type="button"
             class="btn btn-outline-danger btn-sm"
@@ -114,16 +118,19 @@ watch(
     />
     <DetailProduct v-if="showDetails" :product="product" />
 
+    <!-- Popup lorsqu'épuisement de stock -->
     <div
       class="modal fade show"
       v-if="showOutOfStock"
       style="display: block; background: rgba(0, 0, 0, 0.5)"
-      tabindex="-1"
     >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">⚠ Stock épuisé !</h5>
+            <h5 class="modal-title">
+              <i class="bi bi-exclamation-triangle-fill text-warning"></i> Stock
+              épuisé !
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -152,9 +159,6 @@ watch(
 </template>
 
 <style scoped>
-.card {
-  border-radius: 12px;
-}
 .out-of-stock {
   color: red;
   font-weight: bold;
@@ -168,20 +172,5 @@ watch(
 .high-stock {
   color: green;
   font-weight: bold;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-dialog {
-  background: white;
-  border-radius: 10px;
 }
 </style>

@@ -34,8 +34,4 @@ defineProps<{
   </div>
 </template>
 
-<style scoped>
-.card {
-  border-radius: 12px;
-}
-</style>
+<style scoped></style>
